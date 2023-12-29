@@ -1,0 +1,12 @@
+[package]
+name = "xfftcodec"
+version = "0.1.0"
+edition = "2021"
+
+[profile.dev]
+opt-level = 0  # Controls the --opt-level the compiler builds with
+debug = true   # Controls whether the compiler passes `-g`
+
+[dependencies]
+wav = "1.0.0"
+xfft = "0.2.0"
