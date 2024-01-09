@@ -57,7 +57,7 @@ impl<F> Ch<'_, F> where F: Fn(&mut [f64]) {
         if total_num_samples == 0 {
             panic!("The total number of samples must be > 0");
         }
-        let mut ch = Ch {
+        Ch {
             ctx: ctx,
             total_num_samples: total_num_samples,
             x_index: 0,
@@ -66,11 +66,7 @@ impl<F> Ch<'_, F> where F: Fn(&mut [f64]) {
             fftx: Vec::new(),
             prev_fftx: Vec::new(),
             filter: filter,
-        };
-        ch.prev_in.resize(ctx.num_new_samples, 0.0);
-        ch.fftx.resize(2 * ctx.num_new_samples, 0.0);
-        ch.prev_fftx.resize(ctx.num_new_samples, 0.0);
-        ch
+        }
     }
 
     // Carry out the stages of the filtering process for one
@@ -80,11 +76,15 @@ impl<F> Ch<'_, F> where F: Fn(&mut [f64]) {
             panic!("Input and output slices must have exact length");
         }
         let n = self.ctx.num_new_samples;
+        self.x_index = 0;
+        self.y_index = 0;
+        self.prev_in.resize(n, 0.0);
+        self.fftx.resize(2 * n, 0.0);
+        self.prev_fftx.resize(n, 0.0);
         let mut tempx = Vec::new();
         let mut tempy = Vec::new();
-
-        tempx.resize(self.ctx.num_new_samples, 0.0);
-        tempy.resize(self.ctx.num_new_samples, 0.0);
+        tempx.resize(n, 0.0);
+        tempy.resize(n, 0.0);
 
         while self.y_index < self.total_num_samples {
             if self.x_index == 0 {
